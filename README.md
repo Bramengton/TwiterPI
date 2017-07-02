@@ -14,6 +14,9 @@ TwiterPI
 * Обновление по вертикальному или горизонтальному свайпу <a href=https://github.com/omadahealth/SwipyRefreshLayout>SwipyRefreshLayout</a><br>compile 'com.github.omadahealth:swipy:1.2.3@aar'
 * <a href=http://loopj.com/android-smart-image-view/>Android Smart Image View</a>
 
+Иконки
+* <a href=https://materialdesignicons.com>Material Design Icons</a>
+
 //------------------------------------------
 
 Test assignments for vacancy Android Developer<br>This is the implementation of a primitive client twitter, is able to display search queries and all!
@@ -29,3 +32,6 @@ Libraries:
 * Twitter <a href=http://twitter4j.org>twitter4j (Twitter API)</a><br>compile 'org.twitter4j:twitter4j-core:4.0.4'
 * Refresh on a vertical or horizontal swipe <a href=https://github.com/omadahealth/SwipyRefreshLayout>SwipyRefreshLayout</a><br>compile 'com.github.omadahealth:swipy:1.2.3@aar'
 * <a href=http://loopj.com/android-smart-image-view/>Android Smart Image View</a>
+
+Icons
+* <a href=https://materialdesignicons.com>Material Design Icons</a>
