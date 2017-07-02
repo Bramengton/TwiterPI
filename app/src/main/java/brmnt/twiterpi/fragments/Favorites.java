@@ -1,9 +1,9 @@
 package brmnt.twiterpi.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-import brmnt.twiterpi.AdapterTweets;
-import brmnt.twiterpi.JSONSharedPreferences;
-import brmnt.twiterpi.R;
-import brmnt.twiterpi.Utility;
+import brmnt.twiterpi.*;
 import brmnt.twiterpi.instance.Tweets;
-import twitter4j.*;
+import twitter4j.Status;
+import twitter4j.Twitter;
 
 import java.util.List;
 
@@ -36,10 +34,6 @@ public class Favorites extends Fragment {
         return instance;
     }
 
-    public int inDrawerItem() {
-        return 0;
-    }
-
     private Twitter twitter;
 
     @Override
@@ -57,7 +51,7 @@ public class Favorites extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(R.string.Nearby);
+        getActivity().setTitle(R.string.Favorites);
         twitter = Utility.getTwitterInstance();
         ListView tweets = (ListView) view.findViewById(R.id.twitts);
         tweets.setEmptyView(view.findViewById(R.id.empty));
@@ -75,26 +69,9 @@ public class Favorites extends Fragment {
                         String.format("Id=%s @%s", item.getTweet().getId(), item.getTweet().getUser().getScreenName()));
             }
         });
-
-        SearchTweets(preferences.getLongArray(), adapter);
-    }
-
-    private void SearchTweets(final long[] array, final AdapterTweets adapter) {
-        //query.count(20);
-        AsyncTask<Void, Void, List<Status>> task = new AsyncTask<Void, Void, List<twitter4j.Status>>() {
-            //Этим движением я подгружаю НИЗ то что было до
+        SearchTweets searchTweets = new SearchTweets(twitter, SearchTweets.Job.FAVORITE, new SearchTweets.OnSearchListener() {
             @Override
-            protected List<twitter4j.Status> doInBackground(Void... params) {
-                try {
-                    return twitter.lookup(array);
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(List<twitter4j.Status> result) {
+            public void onFound(List<Status> result) {
                 if (result != null) {
                     adapter.addAll(result);
                     adapter.notifyDataSetChanged();
@@ -102,11 +79,16 @@ public class Favorites extends Fragment {
                     showToast("Не удалось получить список");
                 }
             }
-        };
-        task.execute();
+        });
+
+        searchTweets.getTrySearch(preferences.getLongArray());
     }
 
     private void showToast(String text) {
-        Toast.makeText(this.getContext(), text, Toast.LENGTH_SHORT).show();
+        View view = this.getView();
+        if(view!=null)
+            Snackbar.make(view, text, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        else
+            Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,7 +1,6 @@
 package brmnt.twiterpi;
 
 import android.os.AsyncTask;
-import android.support.v7.widget.SearchView;
 import twitter4j.*;
 
 import java.util.List;
@@ -22,8 +21,8 @@ public final class SearchTweets {
 
     private Job mJob;
     public enum Job{
-        Search,
-        Favorits;
+        SEARCH,
+        FAVORITE;
     }
 
     public SearchTweets(final Twitter twitter, final Job init, OnSearchListener listener){
@@ -33,13 +32,11 @@ public final class SearchTweets {
     }
 
     public void getTrySearch(Query query){
-        switch (mJob){
-            case Search:
-                new SearchTweet(query).execute();
-                break;
-            case Favorits:
-                break;
-        }
+        new SearchTweet(query).execute();
+    }
+
+    public void getTrySearch(long[] array){
+        new SearchTweet(array).execute();
     }
 
     public void cleanOldResult(){
@@ -49,12 +46,33 @@ public final class SearchTweets {
 
     private class SearchTweet extends AsyncTask<Void, Void, List<Status>> {
         private Query mQuery;
-        SearchTweet(final Query query){
+        private long[] tweetsId;
+        SearchTweet(Query query){
             this.mQuery = query;
+        }
+
+        SearchTweet(long[] array){
+            this.tweetsId = array;
         }
 
         @Override
         protected List<twitter4j.Status> doInBackground(Void... voids) {
+            switch (mJob){
+                case SEARCH:
+                    return doNearbySearch();
+
+                case FAVORITE:
+                    return doFavorite();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<twitter4j.Status> result) {
+            if(mSearchListener!=null) mSearchListener.onFound(result);
+        }
+
+        private List<twitter4j.Status> doNearbySearch(){
             try {
                 if(mResult != null) {
                     if (mResult.hasNext()) mResult = mTwitter.search(mResult.nextQuery());
@@ -66,42 +84,13 @@ public final class SearchTweets {
             return null;
         }
 
-        @Override
-        protected void onPostExecute(List<twitter4j.Status> result) {
-            if(mSearchListener!=null) mSearchListener.onFound(result);
-        }
-    }
-
-    public SearchView.OnQueryTextListener getSearchListener(final AdapterTweets adapter, final Query query){
-        return new SearchListener(adapter, query);
-    }
-
-    private class SearchListener implements SearchView.OnQueryTextListener{
-        private AdapterTweets mAdapter;
-        private Query mQuery;
-        public SearchListener(final AdapterTweets adapter, final Query query){
-            this.mAdapter =adapter;
-            this.mQuery =query;
-        }
-
-        @Override
-        public boolean onQueryTextSubmit(String newText){
-            return false;
-        }
-
-        @Override
-        public boolean onQueryTextChange(String newText){
-            startSearch(newText);
-            return true;
-        }
-
-        private void startSearch(String search){
-            if(!search.isEmpty()){
-                this.mAdapter.cleanData();
-                cleanOldResult();
-                mQuery.query(search);
-                getTrySearch(this.mQuery);
+        private List<twitter4j.Status> doFavorite(){
+            try {
+                return mTwitter.lookup(this.tweetsId);
+            } catch (TwitterException e) {
+                e.printStackTrace();
             }
+            return null;
         }
     }
 }

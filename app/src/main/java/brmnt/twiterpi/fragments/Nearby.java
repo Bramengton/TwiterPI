@@ -70,7 +70,7 @@ public class Nearby extends Fragment {
         final AdapterTweets adapter = new AdapterTweets(this.getContext());
         mTweets.setAdapter(adapter);
 
-        searchTweets = new SearchTweets(twitter, SearchTweets.Job.Search, new SearchTweets.OnSearchListener() {
+        searchTweets = new SearchTweets(twitter, SearchTweets.Job.SEARCH, new SearchTweets.OnSearchListener() {
             @Override
             public void onFound(List<Status> result) {
                 if (result != null) {
