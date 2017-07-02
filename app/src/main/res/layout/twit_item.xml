@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="horizontal"
+              android:paddingTop="10dp"
+              android:paddingBottom="10dp"
+              android:descendantFocusability="blocksDescendants"
+              style="@style/ItemPaddingOutside">
+
+    <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="fill_parent"
+            android:gravity="top"
+            android:orientation="vertical">
+        <com.loopj.android.image.SmartImageView
+                style="@style/ItemIcon"
+                android:id="@+id/avatar"
+                tools:ignore="ContentDescription"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|bottom">
+
+            <ToggleButton
+                    android:id="@+id/buttonFav"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    style="@style/toggleButton"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:background="@drawable/ic_toggle_bg"/>
+
+            <!--<ImageView-->
+                    <!--android:id="@+id/buttonFav"-->
+                    <!--android:layout_width="24dp"-->
+                    <!--android:layout_height="24dp"-->
+                    <!--android:focusableInTouchMode="true"-->
+                    <!--tools:ignore="ContentDescription"/>-->
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            style="@style/ItemMarginInside">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:id="@+id/user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <brmnt.twiterpi.views.MessageView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                style="@style/ItemMultyLine.Medium18sp"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+            <TextView
+                    android:id="@+id/time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

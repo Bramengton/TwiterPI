@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file:///mnt/DiskE/Sources/Android/TwiterPI/Android-TwiterPI.iml" filepath="/mnt/DiskE/Sources/Android/TwiterPI/Android-TwiterPI.iml" />
+      <module fileurl="file:///mnt/DiskE/Sources/Android/TwiterPI/app/app.iml" filepath="/mnt/DiskE/Sources/Android/TwiterPI/app/app.iml" />
+      <module fileurl="file:///mnt/DiskE/Sources/Android/TwiterPI/library/library.iml" filepath="/mnt/DiskE/Sources/Android/TwiterPI/library/library.iml" />
+    </modules>
+  </component>
+</project>

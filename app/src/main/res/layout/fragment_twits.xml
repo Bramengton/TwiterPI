@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srl_direction="both">
+        <ListView
+                android:id="@+id/twitts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="8dp"
+                android:dividerHeight="1dp"
+                tools:listitem="@layout/twit_item"/>
+
+
+    </com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+
+
+
+    <TextView android:id="@+id/empty"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:visibility="gone"
+              android:text="@string/EmptyTweets"/>
+</FrameLayout>
