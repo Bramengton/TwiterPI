@@ -168,14 +168,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     @Override
     public boolean onNavigationItemSelected(final MenuItem menuItem) {
-        BackPressedAction();
+        doBackPressedAction();
         onNavigationItemClicked(menuItem.getItemId());
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        if(BackPressedAction()) return;
+        if(doBackPressedAction()) return;
         super.onBackPressed();
     }
 
@@ -187,19 +187,19 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     private void onNavigationItemClicked(final int itemId) {
         if(itemId == sNavDrawerItem){
             // If already selected then close drawer and do nothing
-            BackPressedAction();
+            doBackPressedAction();
             return;
         }
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                CustomNavigate(itemId);
+                setCustomNavigate(itemId);
             }
         }, DRAWER_CLOSE_DELAY_MS);
     }
 
-    private boolean BackPressedAction(){
+    private boolean doBackPressedAction(){
         if(mDrawerLayout !=null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
             return true;
@@ -207,7 +207,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         return false;
     }
 
-    private void CustomNavigate(final int id) {
+    private void setCustomNavigate(final int id) {
         switch (id){
             case R.id.navSearch:
                 setFragment(id, Search.getInstance()).commit();

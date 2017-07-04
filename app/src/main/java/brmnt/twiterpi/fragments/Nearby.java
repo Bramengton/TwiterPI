@@ -1,28 +1,26 @@
 package brmnt.twiterpi.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.*;
+import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 import brmnt.twiterpi.*;
 import brmnt.twiterpi.instance.Tweets;
 import brmnt.twiterpi.views.PatternEditableBuilder;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
-import twitter4j.*;
+import twitter4j.GeoLocation;
+import twitter4j.Query;
+import twitter4j.Status;
+import twitter4j.Twitter;
 
 import java.util.List;
 
 /**
  * @author Bramengton on 01/07/2017.
  */
-public class Nearby extends Fragment {
+public class Nearby extends SearchFragment {
     static private Nearby instance;
 
     public Nearby() {
@@ -36,27 +34,15 @@ public class Nearby extends Fragment {
     }
 
     private ListView mTweets;
-    private Query query;
-    private SearchTweets searchTweets;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_twits, container, false);
-    }
+    private Query mQuery;
+    private SearchTweets mSearchTweets;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(R.string.Nearby);
         final SwipyRefreshLayout mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.swipe_container);
-        Twitter twitter = Utility.getTwitterInstance();
+        Twitter twitter = TwiterApplication.getTwitterInstance();
         mTweets = (ListView) view.findViewById(R.id.twitts);
         mTweets.setEmptyView(view.findViewById(R.id.empty));
 
@@ -64,20 +50,20 @@ public class Nearby extends Fragment {
         double latitude = 46.975033;
         double longitude = 31.994583;
         final GeoLocation location = new GeoLocation(latitude, longitude);
-        query = new Query();
-        query.geoCode(location, 10, String.valueOf(Query.KILOMETERS));
+        mQuery = new Query();
+        mQuery.geoCode(location, 10, String.valueOf(Query.KILOMETERS));
 
         final AdapterTweets adapter = new AdapterTweets(this.getContext());
         mTweets.setAdapter(adapter);
 
-        searchTweets = new SearchTweets(twitter, SearchTweets.Job.SEARCH, new SearchTweets.OnSearchListener() {
+        mSearchTweets = new SearchTweets(twitter, SearchTweets.Job.SEARCH, new SearchTweets.OnSearchListener() {
             @Override
             public void onFound(List<Status> result) {
                 if (result != null) {
                     adapter.addAll(result);
                     adapter.notifyDataSetChanged();
                 } else {
-                    showToast("Не удалось получить список");
+                    showToast(R.string.FailedTweets);
                 }
                 mSwipyRefreshLayout.setRefreshing(false);
             }
@@ -97,10 +83,10 @@ public class Nearby extends Fragment {
         adapter.setSpannableClickedListener(new PatternEditableBuilder.SpannableClickedListener() {
             @Override
             public void onSpanClicked(String text) {
-                searchTweets.cleanOldResult();
+                mSearchTweets.cleanOldResult();
                 adapter.cleanData();
-                query.setQuery(text);
-                searchTweets.getTrySearch(query);
+                mQuery.setQuery(text);
+                mSearchTweets.getTrySearch(mQuery);
             }
         });
 
@@ -109,60 +95,39 @@ public class Nearby extends Fragment {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction==SwipyRefreshLayoutDirection.TOP){
-                    query.query(null);
-                    searchTweets.cleanOldResult();
+                    mQuery.query(null);
+                    mSearchTweets.cleanOldResult();
                     adapter.cleanData();
                 }
-                searchTweets.getTrySearch(query);
+                mSearchTweets.getTrySearch(mQuery);
             }
         });
 
-        searchTweets.getTrySearch(query);
+        mSearchTweets.getTrySearch(mQuery);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_twiter, menu);
-        UIListSearch(menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    private void showToast(String text) {
-        View view = this.getView();
-        if(view!=null)
-            Snackbar.make(view, text, Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        else
-            Toast.makeText(this.getContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    private void UIListSearch(Menu menu){
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        if (searchView == null) return;
-        searchView.setIconifiedByDefault(true);
-        searchView.setQueryHint(getString(android.R.string.search_go));
-        searchView.setOnQueryTextListener(new SearchListener());
-    }
-
-    private class SearchListener implements SearchView.OnQueryTextListener{
-        @Override
-        public boolean onQueryTextSubmit(String newText){
-            return false;
-        }
-
-        @Override
-        public boolean onQueryTextChange(String newText){
-            startSearch(newText);
-            return true;
-        }
-
-        private void startSearch(String search){
-            if(!search.isEmpty()){
-                ((AdapterTweets) mTweets.getAdapter()).cleanData();
-                searchTweets.cleanOldResult();
-                query.query(search);
-                searchTweets.getTrySearch(query);
+    public SearchListener setSearchListener() {
+        return new SearchListener() {
+            @Override
+            void startSearch(String search) {
+                if(!search.isEmpty()){
+                    ((AdapterTweets) mTweets.getAdapter()).cleanData();
+                    mSearchTweets.cleanOldResult();
+                    mQuery.query(search);
+                    mSearchTweets.getTrySearch(mQuery);
+                }
             }
-        }
+        };
+    }
+
+    @Override
+    public boolean setMenuVisible() {
+        return true;
+    }
+
+    @Override
+    public int setFragmentLayout() {
+        return R.layout.fragment_twits;
     }
 }

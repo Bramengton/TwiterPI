@@ -3,7 +3,9 @@
     package="brmnt.twiterpi" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--Я знаю что правильно Twitter, а не Twiter -->
     <application
+        android:name=".TwiterApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
