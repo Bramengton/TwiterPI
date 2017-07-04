@@ -13,6 +13,7 @@ TwiterPI
 * Твиттер <a href=http://twitter4j.org>twitter4j (Twitter API)</a><br>compile 'org.twitter4j:twitter4j-core:4.0.4'
 * Обновление по вертикальному или горизонтальному свайпу <a href=https://github.com/omadahealth/SwipyRefreshLayout>SwipyRefreshLayout</a><br>compile 'com.github.omadahealth:swipy:1.2.3@aar'
 * <a href=http://loopj.com/android-smart-image-view/>Android Smart Image View</a>
+* Интерактивные ссылки в TextView <a href=https://gist.github.com/nesquena/f2504c642c5de47b371278ee61c75124>Created by: Nathan Esquenazi</a>
 
 Иконки
 * <a href=https://materialdesignicons.com>Material Design Icons</a>
@@ -32,6 +33,7 @@ Libraries:
 * Twitter <a href=http://twitter4j.org>twitter4j (Twitter API)</a><br>compile 'org.twitter4j:twitter4j-core:4.0.4'
 * Refresh on a vertical or horizontal swipe <a href=https://github.com/omadahealth/SwipyRefreshLayout>SwipyRefreshLayout</a><br>compile 'com.github.omadahealth:swipy:1.2.3@aar'
 * <a href=http://loopj.com/android-smart-image-view/>Android Smart Image View</a>
+* Clickable and highlighted links within a TextView <a href=https://gist.github.com/nesquena/f2504c642c5de47b371278ee61c75124>Created by: Nathan Esquenazi</a>
 
 Icons
 * <a href=https://materialdesignicons.com>Material Design Icons</a>
